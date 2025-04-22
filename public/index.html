@@ -5,11 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator JS App</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .calculator { display: inline-block; border: 1px solid #000; padding: 10px; border-radius: 5px; }
-        .display { width: 100%; height: 40px; text-align: right; font-size: 1.5em; margin-bottom: 10px; }
-        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-        button { font-size: 1.2em; padding: 10px; cursor: pointer; }
+        * {
+            box-sizing: border-box;
+        }
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+        }
+        .calculator { 
+            display: inline-block; 
+            width: fit-content;
+            border: 2px solid #009485; 
+            padding: 10px; 
+            border-radius: 10px; 
+            background: #80cbc4;
+        }
+        .display {  
+            width: 100%;
+            max-width: 292px;
+            height: 60px; 
+            text-align: right; 
+            font-size: 1.5em; 
+            margin-bottom: 10px; 
+            padding: 0 16px;
+            color: #009485;
+            border: none;
+            border-radius: 8px;
+        }
+        input:focus, button:focus {
+            outline: 2px solid #009485;
+            box-shadow: none;
+        }
+
+        .buttons { 
+            display: grid; 
+            width: min-content;
+            grid-template-columns: 
+            repeat(4, 64px); 
+            gap: 12px; 
+        }
+        button { 
+            font-size: 1.2em; 
+            padding: 16px 8px;
+            height: 54px;
+            width: 64px; 
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            background-color: #dff1f1;
+            color: #009485;
+        }
+        button:hover{
+            background-color: #b3dfdc;
+        }
     </style>
 </head>
 <body>

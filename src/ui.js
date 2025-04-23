@@ -7,40 +7,45 @@ let operation = "";
 const display = document.getElementById("display");
 
 function updateDisplay() {
-  display.value = currentInput;
+  display.value = currentInput || "0";
 }
 
-export function setupUI() {
-  document.querySelectorAll(".buttons button").forEach((button) => {
-    button.addEventListener("click", () => {
-      const value = button.innerText;
+export function appendNumber(number) {
+  if (currentInput === "0" && number !== ".") {
+    currentInput = number.toString();
+  } else {
+    currentInput += number.toString();
+  }
+  updateDisplay();
+}
 
-      if (!isNaN(value) || value === ".") {
-        currentInput += value;
-      } else if (["+", "-", "×", "÷"].includes(value)) {
-        previousInput = currentInput;
-        operation = value;
-        currentInput = "";
-      } else if (value === "=") {
-        currentInput = calculateResult();
-      } else if (value === "C") {
-        currentInput = "";
-        previousInput = "";
-        operation = "";
-      } else if (value === "±") {
-        currentInput = Calculator.negate(parseFloat(currentInput)).toString();
-      } else if (value === "%") {
-        currentInput = Calculator.percent(parseFloat(currentInput)).toString();
-      }
+export function appendDecimal() {
+  if (currentInput == ""){
+    currentInput = "0.";
+    updateDisplay();
+  }
+  if (!currentInput.includes(".")) {
+    currentInput += ".";
+    updateDisplay();
+  }
+}
 
-      updateDisplay();
-    });
-  });
+export function setOperation(op) {
+  if (currentInput === "") return;
+  if (previousInput !== "") {
+    currentInput = calculateResult();
+  }
+  operation = op;
+  previousInput = currentInput;
+  currentInput = "";
+  updateDisplay();
 }
 
 function calculateResult() {
   const a = parseFloat(previousInput);
   const b = parseFloat(currentInput);
+
+  if (isNaN(a) || isNaN(b)) return currentInput;
 
   switch (operation) {
     case "+":
@@ -54,4 +59,48 @@ function calculateResult() {
     default:
       return currentInput;
   }
+}
+
+export function calculate() {
+  if (operation === "" || currentInput === "") return;
+  currentInput = calculateResult();
+  previousInput = "";
+  operation = "";
+  updateDisplay();
+}
+
+export function clearDisplay() {
+  currentInput = "";
+  previousInput = "";
+  operation = "";
+  updateDisplay();
+}
+
+export function negate() {
+  if (currentInput === "") return;
+  currentInput = Calculator.negate(parseFloat(currentInput)).toString();
+  updateDisplay();
+}
+
+export function percent() {
+  if (currentInput === "") return;
+  currentInput = Calculator.percent(parseFloat(currentInput)).toString();
+  updateDisplay();
+}
+
+export function setupUI() {
+  document.querySelectorAll(".number-button").forEach((button) => {
+    button.addEventListener("click", () => appendNumber(button.innerText));
+  });
+
+  document.querySelector(".decimal-button").addEventListener("click", appendDecimal);
+
+  document.querySelectorAll(".operation-button").forEach((button) => {
+    button.addEventListener("click", () => setOperation(button.innerText));
+  });
+
+  document.querySelector(".equals-button").addEventListener("click", calculate);
+  document.querySelector(".clear-button").addEventListener("click", clearDisplay);
+  document.querySelector(".negate-button").addEventListener("click", negate);
+  document.querySelector(".percent-button").addEventListener("click", percent);
 }
